@@ -1,0 +1,43 @@
+= Fedora NVIDIA Container Toolkit SELinux README =
+
+To be able to use the toolkit with SELinux enforcing, you must allow container_t
+access to use devices. This package automatically enables this policy boolean and 
+it affects all containers.
+
+Test that everything is working using the CDI nvidia device:
+
+$ podman run --device nvidia.com/gpu=all --rm fedora:latest nvidia-smi
+
+To disable the global allow container_t to use devices:
+
+$ sudo setsebool -P container_use_devices 0
+
+The container will no longer have access to the device:
+
+$ podman run --device nvidia.com/gpu=all --rm fedora:latest nvidia-smi
+Failed to initialize NVML: Insufficient Permissions
+
+
+= Restrictive NVIDIA Focused Policy =
+
+Alternatively, a restrictive policy is provided with a new type 
+nvidia_container_t.
+
+To run containers under this policy configure it with the following option:
+
+--security-opt label=type:nvidia_container_t
+
+For example:
+
+$ podman run --device nvidia.com/gpu=all \
+             --security-opt label=type:nvidia_container_t \
+             --rm fedora:latest nvidia-smi
+
+$ podman run --device nvidia.com/gpu=all \
+             --security-opt label=type:nvidia_container_t \
+             --rm nvcr.io/nvidia/cuda nvidia-smi
+
+$ podman run --device nvidia.com/gpu=all \
+             --security-opt label=type:nvidia_container_t \
+             --rm tensorflow/tensorflow:latest-gpu \
+             python -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
