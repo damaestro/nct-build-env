@@ -14,7 +14,7 @@
 
 # https://github.com/NVIDIA/nvidia-container-toolkit
 %global goipath         github.com/NVIDIA/nvidia-container-toolkit
-Version:                1.18.0
+Version:                1.18.1
 
 %global __golang_extldflags -Wl,-z,lazy -Wl,--export-dynamic
 
@@ -42,6 +42,7 @@ Source4:        nvidia-container-toolkit-selinux.README.txt
 Recommends:     (%{name}-selinux = %{version}-%{release} if selinux-policy-%{selinuxtype})
 BuildRequires:  container-selinux >= %{container_selinux_v}
 BuildRequires:  go-vendor-tools
+BuildRequires:  golang >= 1.25
 BuildRequires:  selinux-policy-devel
 
 
