@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export NCT_VERSION=1.18.1
+export NCT_VERSION=1.19.0
 
 # assemble sources
 rpmdev-setuptree
